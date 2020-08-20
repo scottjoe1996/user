@@ -6,8 +6,8 @@ import static org.mockito.Mockito.when;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import com.postitapplications.exception.exceptions.NullOrEmptyException;
 import com.postitapplications.user.document.User;
-import com.postitapplications.user.exception.NullOrEmptyException;
 import com.postitapplications.user.repository.UserRepository;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;

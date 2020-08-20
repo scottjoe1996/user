@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.postitapplications.exception.exceptions.NullOrEmptyException;
 import com.postitapplications.user.document.User;
-import com.postitapplications.user.exception.NullOrEmptyException;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

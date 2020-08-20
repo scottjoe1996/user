@@ -1,7 +1,7 @@
 package com.postitapplications.user.utility;
 
+import com.postitapplications.exception.exceptions.NullOrEmptyException;
 import com.postitapplications.user.document.User;
-import com.postitapplications.user.exception.NullOrEmptyException;
 import java.util.UUID;
 
 public class DocumentValidator {
