@@ -51,7 +51,7 @@ public class UserServiceTests {
             userService.saveUser(new User(null, null, "password"));
         });
 
-        assertThat(exception.getMessage()).isEqualTo("Username cannot be null or empty");
+        assertThat(exception.getMessage()).isEqualTo("User's username cannot be null or empty");
     }
 
     @Test
@@ -62,7 +62,7 @@ public class UserServiceTests {
             userService.saveUser(new User(null, "", "password"));
         });
 
-        assertThat(exception.getMessage()).isEqualTo("Username cannot be null or empty");
+        assertThat(exception.getMessage()).isEqualTo("User's username cannot be null or empty");
     }
 
     @Test
@@ -149,7 +149,7 @@ public class UserServiceTests {
             userService.updateUser(new User(UUID.randomUUID(), null, "password"));
         });
 
-        assertThat(exception.getMessage()).isEqualTo("Username cannot be null or empty");
+        assertThat(exception.getMessage()).isEqualTo("User's username cannot be null or empty");
     }
 
     @Test
@@ -160,7 +160,7 @@ public class UserServiceTests {
             userService.updateUser(new User(UUID.randomUUID(), "", "password"));
         });
 
-        assertThat(exception.getMessage()).isEqualTo("Username cannot be null or empty");
+        assertThat(exception.getMessage()).isEqualTo("User's username cannot be null or empty");
     }
 
     @Test

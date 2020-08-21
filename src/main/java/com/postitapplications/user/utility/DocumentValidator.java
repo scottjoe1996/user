@@ -17,7 +17,7 @@ public class DocumentValidator {
 
     private static void validateUsername(String username) {
         if (username == null || username.isEmpty()) {
-            throw new NullOrEmptyException("Username cannot be null or empty");
+            throw new NullOrEmptyException("User's username cannot be null or empty");
         }
     }
 
