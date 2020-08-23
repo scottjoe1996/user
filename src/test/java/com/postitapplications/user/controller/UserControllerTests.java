@@ -2,6 +2,7 @@ package com.postitapplications.user.controller;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -10,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.postitapplications.user.document.User;
 import com.postitapplications.user.repository.UserRepository;
@@ -109,5 +111,79 @@ public class UserControllerTests {
                                     .accept(MediaType.APPLICATION_JSON)).andDo(print())
                .andExpect(status().isNotFound()).andExpect(content()
             .string(containsString("User with id: " + userToUpdate.getId() + " was not found")));
+    }
+
+    @Test
+    public void updateUserShouldReturnExpectedErrorMessageWhenUserUsernameIsNull()
+        throws Exception {
+        User userToUpdate = new User(UUID.randomUUID(), null, "password");
+
+        mockMvc.perform(put("/user").contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(userToUpdate))
+                                    .accept(MediaType.APPLICATION_JSON)).andDo(print())
+               .andExpect(status().isBadRequest()).andExpect(
+            content().string(containsString("User's username cannot be null or empty")));
+    }
+
+    @Test
+    public void updateUserShouldReturnExpectedErrorMessageWhenUserUsernameIsEmpty()
+        throws Exception {
+        User userToUpdate = new User(UUID.randomUUID(), "", "password");
+
+        mockMvc.perform(put("/user").contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(userToUpdate))
+                                    .accept(MediaType.APPLICATION_JSON)).andDo(print())
+               .andExpect(status().isBadRequest()).andExpect(
+            content().string(containsString("User's username cannot be null or empty")));
+    }
+
+    @Test
+    public void updateUserShouldReturnExpectedErrorMessageWhenUserPasswordIsNull()
+        throws Exception {
+        User userToUpdate = new User(UUID.randomUUID(), "johnSmith123", null);
+
+        mockMvc.perform(put("/user").contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(userToUpdate))
+                                    .accept(MediaType.APPLICATION_JSON)).andDo(print())
+               .andExpect(status().isBadRequest()).andExpect(
+            content().string(containsString("User's password cannot be null or empty")));
+    }
+
+    @Test
+    public void updateUserShouldReturnExpectedErrorMessageWhenUserPasswordIsEmpty()
+        throws Exception {
+        User userToUpdate = new User(UUID.randomUUID(), "johnSmith123", "");
+
+        mockMvc.perform(put("/user").contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(userToUpdate))
+                                    .accept(MediaType.APPLICATION_JSON)).andDo(print())
+               .andExpect(status().isBadRequest()).andExpect(
+            content().string(containsString("User's password cannot be null or empty")));
+    }
+
+    @Test
+    public void updateUserShouldReturnExpectedErrorMessageWhenUserIdIsNull() throws Exception {
+        User userToUpdate = new User(null, "johnSmith123", "password");
+
+        mockMvc.perform(put("/user").contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(userToUpdate))
+                                    .accept(MediaType.APPLICATION_JSON)).andDo(print())
+               .andExpect(status().isBadRequest())
+               .andExpect(content().string(containsString("Id cannot be null")));
+    }
+
+    @Test
+    public void deleteUserByIdShouldReturnExpectedErrorMessageWhenUserIsNotFound()
+        throws Exception {
+        DeleteResult deleteResult = Mockito.mock(DeleteResult.class);
+        UUID nonExistingUserId = UUID.randomUUID();
+
+        when(deleteResult.getDeletedCount()).thenReturn((long) 0);
+        when(userRepository.removeById(nonExistingUserId)).thenReturn(deleteResult);
+
+        mockMvc.perform(delete("/user/" + nonExistingUserId).contentType(MediaType.APPLICATION_JSON)
+                                                            .accept(MediaType.APPLICATION_JSON))
+               .andDo(print()).andExpect(status().isNotFound()).andExpect(content()
+            .string(containsString("User with id: " + nonExistingUserId + " was not found")));
     }
 }
