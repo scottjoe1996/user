@@ -1,0 +1,15 @@
+server:
+  port: 1030
+
+spring:
+  application:
+    name: user-service
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:1010/eureka
+  instance:
+    hostname: localhost
