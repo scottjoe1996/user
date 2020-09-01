@@ -16,6 +16,8 @@ public interface UserRepo {
 
     User findById(UUID id);
 
+    User findByUsername(String username);
+
     UpdateResult update(User user);
 
     DeleteResult removeById(UUID id);

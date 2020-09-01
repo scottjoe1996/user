@@ -120,6 +120,47 @@ public class UserServiceTests {
     }
 
     @Test
+    public void getUserByUsernameShouldReturnAUserWhenUserExists() {
+        User savedUser = new User(UUID.randomUUID(), "johnSmith123", "password");
+
+        when(mockUserRepository.findByUsername("johnSmith123")).thenReturn(savedUser);
+        userService = new UserService(mockUserRepository);
+
+        assertThat(userService.getUserByUsername("johnSmith123")).isEqualTo(savedUser);
+    }
+
+    @Test
+    public void getUserByUsernameShouldReturnNullWhenUserDoesNotExist() {
+        String invalidUsername = "nonExistingUsername";
+        when(mockUserRepository.findByUsername(invalidUsername)).thenReturn(null);
+        userService = new UserService(mockUserRepository);
+
+        assertThat(userService.getUserByUsername(invalidUsername)).isEqualTo(null);
+    }
+
+    @Test
+    public void getUserByUsernameShouldThrowIllegalArgumentExceptionWhenUsernameIsNull() {
+        userService = new UserService(mockUserRepository);
+
+        Exception exception = assertThrows(NullOrEmptyException.class, () -> {
+            userService.getUserByUsername(null);
+        });
+
+        assertThat(exception.getMessage()).isEqualTo("User's username cannot be null or empty");
+    }
+
+    @Test
+    public void getUserByUsernameShouldThrowIllegalArgumentExceptionWhenUsernameIsEmpty() {
+        userService = new UserService(mockUserRepository);
+
+        Exception exception = assertThrows(NullOrEmptyException.class, () -> {
+            userService.getUserByUsername("");
+        });
+
+        assertThat(exception.getMessage()).isEqualTo("User's username cannot be null or empty");
+    }
+
+    @Test
     public void updateUserShouldReturnUpdateResultWhenUsingAValidPerson() {
         User updatedUser = new User(UUID.randomUUID(), "jeffSmith123", "password");
         UpdateResult mockUpdateResult = Mockito.mock(UpdateResult.class);

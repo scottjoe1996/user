@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.UUID;
 import javax.validation.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "users")
@@ -12,6 +13,7 @@ public class User {
     @Id
     private final UUID id;
     @NotBlank
+    @Indexed(unique = true)
     private final String username;
     @NotBlank
     private final String password;

@@ -3,14 +3,18 @@ package com.postitapplications.user.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.mongodb.client.ListIndexesIterable;
 import com.postitapplications.user.document.User;
+import java.util.List;
 import java.util.UUID;
+import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -55,6 +59,20 @@ public class UserRepositoryTests {
         });
 
         assertThat(exception.getMessage()).contains("Id must not be null!");
+    }
+
+    @Test
+    public void findByUsernameShouldReturnExpectedUserWithCorrectUsername() {
+        String savedUserUsername = mongoTemplate.findAll(User.class).get(0).getUsername();
+        User userFound = userRepository.findByUsername(savedUserUsername);
+
+        assertThat(userFound.getUsername()).isEqualTo("johnSmith123");
+        assertThat(userFound.getPassword()).isEqualTo("password");
+    }
+
+    @Test
+    public void findByUsernameShouldReturnNullWithInvalidUsername() {
+        assertThat(userRepository.findByUsername("notSavedUsername")).isEqualTo(null);
     }
 
     @Test
@@ -137,5 +155,12 @@ public class UserRepositoryTests {
         });
 
         assertThat(exception.getMessage()).contains("Cannot autogenerate id");
+    }
+
+    @Test
+    public void saveShouldThrowExceptionWhenSavingWithAPreExistingUsername() {
+        assertThrows(DuplicateKeyException.class, () -> {
+            userRepository.save(new User(null, "johnSmith123", "password"));
+        });
     }
 }

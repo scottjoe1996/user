@@ -30,6 +30,11 @@ public class UserService {
         return userRepo.findById(id);
     }
 
+    public User getUserByUsername(String username) {
+        DocumentValidator.validateUsername(username);
+        return userRepo.findByUsername(username);
+    }
+
     public UpdateResult updateUser(User user) {
         DocumentValidator.validateUser(user);
         DocumentValidator.validateUserId(user.getId());

@@ -33,6 +33,12 @@ public class UserRepository implements UserRepo {
     }
 
     @Override
+    public User findByUsername(String username) {
+        return mongoTemplate
+            .findOne(new Query(Criteria.where("username").is(username)), User.class);
+    }
+
+    @Override
     public UpdateResult update(User user) {
         Update update = new Update();
         update.set("username", user.getUsername());
