@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.postitapplications.exception.exceptions.NullOrEmptyException;
+import com.postitapplications.exception.exceptions.UsernameTakenException;
 import com.postitapplications.user.document.User;
 import com.postitapplications.user.repository.UserRepository;
 import java.util.UUID;
@@ -52,6 +53,19 @@ public class UserServiceTests {
         });
 
         assertThat(exception.getMessage()).isEqualTo("User's username cannot be null or empty");
+    }
+
+    @Test
+    public void saveUserShouldThrowUsernameTakenExceptionWhenUserUsernameAlreadyExists() {
+        User savedUser = new User(UUID.randomUUID(), "johnSmith123", "password");
+        when(mockUserRepository.findByUsername("johnSmith123")).thenReturn(savedUser);
+        userService = new UserService(mockUserRepository);
+
+        Exception exception = assertThrows(UsernameTakenException.class, () -> {
+            userService.saveUser(new User(null, "johnSmith123", "password"));
+        });
+
+        assertThat(exception.getMessage()).isEqualTo("Cannot save user as johnSmith123 is already taken");
     }
 
     @Test

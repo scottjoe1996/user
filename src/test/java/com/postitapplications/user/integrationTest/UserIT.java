@@ -88,6 +88,18 @@ public class UserIT {
     }
 
     @Test
+    public void saveUserShouldReturnConflictStatusCodeWhenUserUsernameAlreadyExists() {
+        User userToSave = new User(UUID.randomUUID(), "johnSmith123", "password");
+        mongoTemplate.save(userToSave);
+
+        ResponseEntity<User> responseEntity = restTemplate
+            .postForEntity("/user", userToSave, User.class);
+        HttpStatus responseStatusCode = responseEntity.getStatusCode();
+
+        assertThat(responseStatusCode).isEqualTo(HttpStatus.CONFLICT);
+    }
+
+    @Test
     public void getUserByIdShouldReturnFoundUser() {
         UUID savedUserId = UUID.randomUUID();
         User savedUser = new User(savedUserId, "John Smith", "password");

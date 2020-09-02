@@ -3,18 +3,14 @@ package com.postitapplications.user.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.mongodb.client.ListIndexesIterable;
 import com.postitapplications.user.document.User;
-import java.util.List;
 import java.util.UUID;
-import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -112,7 +108,7 @@ public class UserRepositoryTests {
 
     @Test
     public void saveShouldAddAUserToTheUserDatabase() {
-        userRepository.save(new User(null, "johnSmith123", "password"));
+        userRepository.save(new User(null, "johnSmith001", "password"));
 
         assertThat(mongoTemplate.findAll(User.class).size()).isEqualTo(2);
     }
@@ -121,7 +117,7 @@ public class UserRepositoryTests {
     public void saveShouldAddAUserToTheUserDatabaseWithAGeneratedUUID() {
         mongoTemplate.dropCollection(User.class);
 
-        userRepository.save(new User(null, "johnSmith123", "password"));
+        userRepository.save(new User(null, "johnSmith001", "password"));
 
         assertThat(mongoTemplate.findAll(User.class).get(0).getId()).isNotNull();
     }
@@ -130,10 +126,10 @@ public class UserRepositoryTests {
     public void saveShouldAddAUserToTheUserDatabaseWithTheExpectedFields() {
         mongoTemplate.dropCollection(User.class);
 
-        userRepository.save(new User(null, "johnSmith123", "password"));
+        userRepository.save(new User(null, "johnSmith001", "password"));
         User savedUser = mongoTemplate.findAll(User.class).get(0);
 
-        assertThat(savedUser.getUsername()).isEqualTo("johnSmith123");
+        assertThat(savedUser.getUsername()).isEqualTo("johnSmith001");
         assertThat(savedUser.getPassword()).isEqualTo("password");
     }
 
@@ -142,7 +138,7 @@ public class UserRepositoryTests {
         mongoTemplate.dropCollection(User.class);
         UUID specifiedUUID = UUID.randomUUID();
 
-        userRepository.save(specifiedUUID, new User(null, "johnSmith123", "password"));
+        userRepository.save(specifiedUUID, new User(null, "johnSmith001", "password"));
         User savedUser = mongoTemplate.findAll(User.class).get(0);
 
         assertThat(savedUser.getId()).isEqualTo(specifiedUUID);
@@ -151,16 +147,9 @@ public class UserRepositoryTests {
     @Test
     public void saveShouldThrowExceptionWhenUsingNullId() {
         Exception exception = assertThrows(InvalidDataAccessApiUsageException.class, () -> {
-            userRepository.save(null, new User(null, "johnSmith123", "password"));
+            userRepository.save(null, new User(null, "johnSmith001", "password"));
         });
 
         assertThat(exception.getMessage()).contains("Cannot autogenerate id");
-    }
-
-    @Test
-    public void saveShouldThrowExceptionWhenSavingWithAPreExistingUsername() {
-        assertThrows(DuplicateKeyException.class, () -> {
-            userRepository.save(new User(null, "johnSmith123", "password"));
-        });
     }
 }

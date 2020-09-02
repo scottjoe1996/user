@@ -75,6 +75,20 @@ public class UserControllerTests {
     }
 
     @Test
+    public void saveUserShouldReturnExpectedErrorMessageWhenUserUsernameAlreadyExists() throws Exception {
+        User userToSave = new User(null, "johnSmith123", "password");
+        User savedUser = new User(UUID.randomUUID(), "johnSmith123", "password");
+
+        when(userRepository.findByUsername("johnSmith123")).thenReturn(savedUser);
+
+        mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(userToSave))
+                                     .accept(MediaType.APPLICATION_JSON)).andDo(print())
+               .andExpect(status().isConflict()).andExpect(
+            content().string(containsString("Cannot save user as johnSmith123 is already taken")));
+    }
+
+    @Test
     public void saveUserShouldReturnExpectedErrorMessageWhenUserPasswordIsEmpty() throws Exception {
         User userToSave = new User(null, "johnSmith123", "");
 

@@ -2,6 +2,7 @@ package com.postitapplications.user.service;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import com.postitapplications.exception.exceptions.UsernameTakenException;
 import com.postitapplications.user.document.User;
 import com.postitapplications.user.repository.UserRepo;
 import com.postitapplications.user.utility.DocumentValidator;
@@ -22,7 +23,17 @@ public class UserService {
 
     public User saveUser(User user) {
         DocumentValidator.validateUser(user);
+
+        if (isUsernameTaken(user.getUsername())) {
+            throw new UsernameTakenException(
+                String.format("Cannot save user as %s is already taken", user.getUsername()));
+        }
+
         return userRepo.save(user);
+    }
+
+    private boolean isUsernameTaken(String username) {
+        return userRepo.findByUsername(username) != null;
     }
 
     public User getUserById(UUID id) {

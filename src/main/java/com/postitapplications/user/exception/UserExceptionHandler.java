@@ -3,6 +3,7 @@ package com.postitapplications.user.exception;
 import com.postitapplications.exception.ExceptionResponseBody;
 import com.postitapplications.exception.exceptions.NullOrEmptyException;
 import com.postitapplications.exception.exceptions.UserNotFoundException;
+import com.postitapplications.exception.exceptions.UsernameTakenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,6 +25,15 @@ public class UserExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {UserNotFoundException.class})
     public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException exception) {
         HttpStatus notFound = HttpStatus.NOT_FOUND;
+        ExceptionResponseBody exceptionResponseBody = new ExceptionResponseBody(notFound,
+            exception.getMessage());
+
+        return new ResponseEntity<>(exceptionResponseBody, notFound);
+    }
+
+    @ExceptionHandler(value = {UsernameTakenException.class})
+    public ResponseEntity<Object> handleUsernameTakenException(UsernameTakenException exception) {
+        HttpStatus notFound = HttpStatus.CONFLICT;
         ExceptionResponseBody exceptionResponseBody = new ExceptionResponseBody(notFound,
             exception.getMessage());
 

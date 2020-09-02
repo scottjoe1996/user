@@ -13,7 +13,6 @@ public class User {
     @Id
     private final UUID id;
     @NotBlank
-    @Indexed(unique = true)
     private final String username;
     @NotBlank
     private final String password;
