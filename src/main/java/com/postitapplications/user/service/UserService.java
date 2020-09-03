@@ -23,13 +23,16 @@ public class UserService {
 
     public User saveUser(User user) {
         DocumentValidator.validateUser(user);
-
-        if (isUsernameTaken(user.getUsername())) {
-            throw new UsernameTakenException(
-                String.format("Cannot save user as %s is already taken", user.getUsername()));
-        }
+        ensureUsernameNotTaken(user.getUsername());
 
         return userRepo.save(user);
+    }
+
+    private void ensureUsernameNotTaken(String username) {
+        if (isUsernameTaken(username)) {
+            throw new UsernameTakenException(
+                String.format("Cannot save user as %s is already taken", username));
+        }
     }
 
     private boolean isUsernameTaken(String username) {

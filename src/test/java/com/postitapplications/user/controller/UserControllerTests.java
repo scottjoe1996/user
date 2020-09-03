@@ -75,7 +75,8 @@ public class UserControllerTests {
     }
 
     @Test
-    public void saveUserShouldReturnExpectedErrorMessageWhenUserUsernameAlreadyExists() throws Exception {
+    public void saveUserShouldReturnExpectedErrorMessageWhenUserUsernameAlreadyExists()
+        throws Exception {
         User userToSave = new User(null, "johnSmith123", "password");
         User savedUser = new User(UUID.randomUUID(), "johnSmith123", "password");
 
@@ -100,8 +101,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void getPersonByIdShouldReturnExpectedErrorMessageWhenPersonIsNotFound()
-        throws Exception {
+    public void getUserByIdShouldReturnExpectedErrorMessageWhenUserIsNotFound() throws Exception {
         UUID nonExistingUserId = UUID.randomUUID();
 
         when(userRepository.findById(nonExistingUserId)).thenReturn(null);
@@ -110,6 +110,20 @@ public class UserControllerTests {
                                                          .accept(MediaType.APPLICATION_JSON))
                .andDo(print()).andExpect(status().isNotFound()).andExpect(content()
             .string(containsString("User with id: " + nonExistingUserId + " was not found")));
+    }
+
+    @Test
+    public void getUserByUsernameShouldReturnExpectedErrorMessageWhenUserIsNotFound()
+        throws Exception {
+        String nonExistingUserUsername = "johnSmith123";
+
+        when(userRepository.findByUsername(nonExistingUserUsername)).thenReturn(null);
+
+        mockMvc.perform(
+            get("/user/username/" + nonExistingUserUsername).contentType(MediaType.APPLICATION_JSON)
+                                                            .accept(MediaType.APPLICATION_JSON))
+               .andDo(print()).andExpect(status().isNotFound()).andExpect(content().string(
+            containsString("User with username: " + nonExistingUserUsername + " was not found")));
     }
 
     @Test

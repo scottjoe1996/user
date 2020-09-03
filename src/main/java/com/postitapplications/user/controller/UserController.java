@@ -47,6 +47,18 @@ public class UserController {
         return foundUser;
     }
 
+    @GetMapping("username/{username}")
+    public User getUserByUsername(@PathVariable("username") String username) {
+        User foundUser = userService.getUserByUsername(username);
+
+        if (foundUser == null) {
+            throw new UserNotFoundException(
+                String.format("User with username: %s was not found", username));
+        }
+
+        return foundUser;
+    }
+
     @PutMapping
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         UpdateResult updateResult = userService.updateUser(user);

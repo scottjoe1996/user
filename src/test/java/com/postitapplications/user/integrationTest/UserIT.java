@@ -144,6 +144,49 @@ public class UserIT {
     }
 
     @Test
+    public void getUserByUsernameShouldReturnFoundUser() {
+        User savedUser = new User(UUID.randomUUID(), "johnSmith123", "password");
+        mongoTemplate.save(savedUser);
+
+        ResponseEntity<User> responseEntity = restTemplate
+            .getForEntity("/user/username/johnSmith123", User.class);
+        User responseEntityBody = responseEntity.getBody();
+
+        assertThat(responseEntityBody.getId()).isEqualTo(savedUser.getId());
+        assertThat(responseEntityBody.getUsername()).isEqualTo(savedUser.getUsername());
+    }
+
+    @Test
+    public void getUserByUsernameShouldReturnOkStatusCodeOnSuccessfulResponse() {
+        User savedUser = new User(UUID.randomUUID(), "johnSmith123", "password");
+        mongoTemplate.save(savedUser);
+
+        ResponseEntity<User> responseEntity = restTemplate
+            .getForEntity("/user/username/johnSmith123", User.class);
+        HttpStatus responseEntityStatusCode = responseEntity.getStatusCode();
+
+        assertThat(responseEntityStatusCode).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    public void getUserByUsernameShouldReturnNotFoundStatusCodeOnNonExistingUserUsername() {
+        ResponseEntity<User> responseEntity = restTemplate
+            .getForEntity("/user/username/randomUsername", User.class);
+        HttpStatus responseEntityStatusCode = responseEntity.getStatusCode();
+
+        assertThat(responseEntityStatusCode).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void getUserByUsernameShouldReturnBadRequestStatusCodeOnInvalidUsername() {
+        ResponseEntity<User> responseEntity = restTemplate
+            .getForEntity("/user/username/", User.class);
+        HttpStatus responseEntityStatusCode = responseEntity.getStatusCode();
+
+        assertThat(responseEntityStatusCode).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
     public void updateUserShouldReturnOKStatusCodeOnSuccessfulUpdate() {
         UUID savedUserId = UUID.randomUUID();
         User savedUser = new User(savedUserId, "johnSmith123", "password");
