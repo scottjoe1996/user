@@ -5,7 +5,7 @@ import com.mongodb.client.result.UpdateResult;
 import com.postitapplications.exception.exceptions.UsernameTakenException;
 import com.postitapplications.user.document.User;
 import com.postitapplications.user.repository.UserRepo;
-import com.postitapplications.user.utility.DocumentValidator;
+import com.postitapplications.user.utility.UserValidator;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,7 +22,7 @@ public class UserService {
     }
 
     public User saveUser(User user) {
-        DocumentValidator.validateUser(user);
+        UserValidator.validateUser(user);
         ensureUsernameNotTaken(user.getUsername());
 
         return userRepo.save(user);
@@ -40,23 +40,23 @@ public class UserService {
     }
 
     public User getUserById(UUID id) {
-        DocumentValidator.validateUserId(id);
+        UserValidator.validateUserId(id);
         return userRepo.findById(id);
     }
 
     public User getUserByUsername(String username) {
-        DocumentValidator.validateUsername(username);
+        UserValidator.validateUsername(username);
         return userRepo.findByUsername(username);
     }
 
     public UpdateResult updateUser(User user) {
-        DocumentValidator.validateUser(user);
-        DocumentValidator.validateUserId(user.getId());
+        UserValidator.validateUser(user);
+        UserValidator.validateUserId(user.getId());
         return userRepo.update(user);
     }
 
     public DeleteResult deleteUserById(UUID id) {
-        DocumentValidator.validateUserId(id);
+        UserValidator.validateUserId(id);
         return userRepo.removeById(id);
     }
 }

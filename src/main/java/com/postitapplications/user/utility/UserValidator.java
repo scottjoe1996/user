@@ -4,7 +4,7 @@ import com.postitapplications.exception.exceptions.NullOrEmptyException;
 import com.postitapplications.user.document.User;
 import java.util.UUID;
 
-public class DocumentValidator {
+public class UserValidator {
 
     public static void validateUser(User user) {
         if (user == null) {

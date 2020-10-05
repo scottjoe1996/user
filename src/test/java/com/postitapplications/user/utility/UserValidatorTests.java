@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class DocumentValidatorTests {
+public class UserValidatorTests {
 
     @Test
     public void validateUserShouldThrowNullPointerExceptionWhenUserIsNull() {
         Exception exception = assertThrows(NullPointerException.class, () -> {
-            DocumentValidator.validateUser(null);
+            UserValidator.validateUser(null);
         });
 
         assertThat(exception.getMessage()).isEqualTo("User cannot be null");
@@ -25,7 +25,7 @@ public class DocumentValidatorTests {
     @Test
     public void validateUserShouldThrowNullOrEmptyExceptionWhenUserUsernameIsNull() {
         Exception exception = assertThrows(NullOrEmptyException.class, () -> {
-            DocumentValidator.validateUser(new User(null, null, "password"));
+            UserValidator.validateUser(new User(null, null, "password"));
         });
 
         assertThat(exception.getMessage()).isEqualTo("User's username cannot be null or empty");
@@ -34,7 +34,7 @@ public class DocumentValidatorTests {
     @Test
     public void validateUserShouldThrowNullOrEmptyExceptionWhenUserUsernameIsEmpty() {
         Exception exception = assertThrows(NullOrEmptyException.class, () -> {
-            DocumentValidator.validateUser(new User(null, "", "password"));
+            UserValidator.validateUser(new User(null, "", "password"));
         });
 
         assertThat(exception.getMessage()).isEqualTo("User's username cannot be null or empty");
@@ -43,7 +43,7 @@ public class DocumentValidatorTests {
     @Test
     public void validateUserShouldThrowNullOrEmptyExceptionWhenUserPasswordIsNull() {
         Exception exception = assertThrows(NullOrEmptyException.class, () -> {
-            DocumentValidator.validateUser(new User(null, "johnSmith123", null));
+            UserValidator.validateUser(new User(null, "johnSmith123", null));
         });
 
         assertThat(exception.getMessage()).isEqualTo("User's password cannot be null or empty");
@@ -52,7 +52,7 @@ public class DocumentValidatorTests {
     @Test
     public void validateUserShouldThrowNullOrEmptyExceptionWhenUserPasswordIsEmpty() {
         Exception exception = assertThrows(NullOrEmptyException.class, () -> {
-            DocumentValidator.validateUser(new User(null, "johnSmith123", ""));
+            UserValidator.validateUser(new User(null, "johnSmith123", ""));
         });
 
         assertThat(exception.getMessage()).isEqualTo("User's password cannot be null or empty");
@@ -61,13 +61,13 @@ public class DocumentValidatorTests {
     @Test
     public void validateUserShouldNotThrowAnExceptionWithValidUser() {
         assertDoesNotThrow(
-            () -> DocumentValidator.validateUser(new User(null, "johnSmith123", "password")));
+            () -> UserValidator.validateUser(new User(null, "johnSmith123", "password")));
     }
 
     @Test
     public void validateUserIdShouldThrowNullPointerExceptionWhenIdIsNull() {
         Exception exception = assertThrows(NullPointerException.class, () -> {
-            DocumentValidator.validateUserId(null);
+            UserValidator.validateUserId(null);
         });
 
         assertThat(exception.getMessage()).isEqualTo("Id cannot be null");
@@ -75,6 +75,6 @@ public class DocumentValidatorTests {
 
     @Test
     public void validateUserIdShouldNotThrowAnExceptionWithValidId() {
-        assertDoesNotThrow(() -> DocumentValidator.validateUserId(UUID.randomUUID()));
+        assertDoesNotThrow(() -> UserValidator.validateUserId(UUID.randomUUID()));
     }
 }
