@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.postitapplications.exception.exceptions.NullOrEmptyException;
+import com.postitapplications.exception.exceptions.ValidationException;
 import com.postitapplications.user.document.User;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -14,8 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class UserValidatorTests {
 
     @Test
-    public void validateUserShouldThrowNullPointerExceptionWhenUserIsNull() {
-        Exception exception = assertThrows(NullPointerException.class, () -> {
+    public void validateUserShouldThrowValidationExceptionWhenUserIsNull() {
+        Exception exception = assertThrows(ValidationException.class, () -> {
             UserValidator.validateUser(null);
         });
 
@@ -65,8 +66,8 @@ public class UserValidatorTests {
     }
 
     @Test
-    public void validateUserIdShouldThrowNullPointerExceptionWhenIdIsNull() {
-        Exception exception = assertThrows(NullPointerException.class, () -> {
+    public void validateUserIdShouldThrowValidationExceptionWhenIdIsNull() {
+        Exception exception = assertThrows(ValidationException.class, () -> {
             UserValidator.validateUserId(null);
         });
 

@@ -4,6 +4,7 @@ import com.postitapplications.exception.ExceptionResponseBody;
 import com.postitapplications.exception.exceptions.NullOrEmptyException;
 import com.postitapplications.exception.exceptions.UserNotFoundException;
 import com.postitapplications.exception.exceptions.UsernameTakenException;
+import com.postitapplications.exception.exceptions.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class UserExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {NullOrEmptyException.class, NullPointerException.class})
+    @ExceptionHandler(value = ValidationException.class)
     public ResponseEntity<Object> handleBadRequestException(Exception exception) {
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;
         ExceptionResponseBody exceptionResponseBody = new ExceptionResponseBody(badRequest,

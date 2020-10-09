@@ -1,6 +1,7 @@
 package com.postitapplications.user.utility;
 
 import com.postitapplications.exception.exceptions.NullOrEmptyException;
+import com.postitapplications.exception.exceptions.ValidationException;
 import com.postitapplications.user.document.User;
 import java.util.UUID;
 
@@ -8,7 +9,7 @@ public class UserValidator {
 
     public static void validateUser(User user) {
         if (user == null) {
-            throw new NullPointerException("User cannot be null");
+            throw new ValidationException("User cannot be null");
         }
 
         validateUsername(user.getUsername());
@@ -29,7 +30,7 @@ public class UserValidator {
 
     public static void validateUserId(UUID id) {
         if (id == null) {
-            throw new NullPointerException("Id cannot be null");
+            throw new ValidationException("Id cannot be null");
         }
     }
 

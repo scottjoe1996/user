@@ -8,6 +8,7 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.postitapplications.exception.exceptions.NullOrEmptyException;
 import com.postitapplications.exception.exceptions.UsernameTakenException;
+import com.postitapplications.exception.exceptions.ValidationException;
 import com.postitapplications.user.document.User;
 import com.postitapplications.user.repository.UserRepository;
 import java.util.UUID;
@@ -34,10 +35,10 @@ public class UserServiceTests {
     }
 
     @Test
-    public void saveUserShouldThrowNullPointerExceptionWhenUserIsNull() {
+    public void saveUserShouldThrowValidationExceptionWhenUserIsNull() {
         userService = new UserService(mockUserRepository);
 
-        Exception exception = assertThrows(NullPointerException.class, () -> {
+        Exception exception = assertThrows(ValidationException.class, () -> {
             userService.saveUser(null);
         });
 
@@ -123,10 +124,10 @@ public class UserServiceTests {
     }
 
     @Test
-    public void getUserByIdShouldThrowNullPointerExceptionWhenUsingNullId() {
+    public void getUserByIdShouldThrowValidationExceptionWhenUsingNullId() {
         userService = new UserService(mockUserRepository);
 
-        Exception exception = assertThrows(NullPointerException.class, () -> {
+        Exception exception = assertThrows(ValidationException.class, () -> {
             userService.getUserById(null);
         });
 
@@ -186,10 +187,10 @@ public class UserServiceTests {
     }
 
     @Test
-    public void updateUserShouldThrowNullPointerExceptionWhenUserIsNull() {
+    public void updateUserShouldThrowValidationExceptionWhenUserIsNull() {
         userService = new UserService(mockUserRepository);
 
-        Exception exception = assertThrows(NullPointerException.class, () -> {
+        Exception exception = assertThrows(ValidationException.class, () -> {
             userService.updateUser(null);
         });
 
@@ -241,10 +242,10 @@ public class UserServiceTests {
     }
 
     @Test
-    public void updateUserShouldThrowNullPointerExceptionWhenUserIdIsNull() {
+    public void updateUserShouldThrowValidationExceptionWhenUserIdIsNull() {
         userService = new UserService(mockUserRepository);
 
-        Exception exception = assertThrows(NullPointerException.class, () -> {
+        Exception exception = assertThrows(ValidationException.class, () -> {
             userService.updateUser(new User(null, "johnSmith123", "password"));
         });
 
@@ -263,10 +264,10 @@ public class UserServiceTests {
     }
 
     @Test
-    public void deleteUserByIdShouldThrowNullPointerExceptionWhenIdIsNull() {
+    public void deleteUserByIdShouldThrowValidationExceptionWhenIdIsNull() {
         userService = new UserService(mockUserRepository);
 
-        Exception exception = assertThrows(NullPointerException.class, () -> {
+        Exception exception = assertThrows(ValidationException.class, () -> {
             userService.deleteUserById(null);
         });
 
